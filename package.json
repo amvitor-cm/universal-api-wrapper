@@ -1,0 +1,13 @@
+{
+  "name": "api-wrapper",
+  "version": "1.0.0",
+  "description": "A reusable API wrapper for [INSERT API NAME]",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node examples/usage.js"
+  },
+  "keywords": ["api", "wrapper", "client"],
+  "author": "Your Name",
+  "license": "MIT"
+}
