@@ -1,4 +1,3 @@
-```markdown
 # Universal API Wrapper
 
 A production-ready, dependency-free JavaScript API client for seamless REST API integration. Built with best practices for reliability, performance, and developer experience.
