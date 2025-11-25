@@ -5,80 +5,62 @@ class APIWrapper {
     this.client = new APIClient(config);
   }
 
-  // Data retrieval methods
-  async getData(id, options = {}) {
+  async getResource(id, endpoint = '/resources') {
     if (!id || typeof id !== 'string') {
       throw new Error('Valid ID is required');
     }
-
-    return this.client.request(`/data/${id}`, options);
+    return this.client.request(`${endpoint}/${id}`);
   }
 
-  async getAllData(params = {}) {
+  async getAllResources(endpoint = '/resources', params = {}) {
     const queryString = new URLSearchParams(params).toString();
-    const endpoint = queryString ? `/data?${queryString}` : '/data';
-    
-    return this.client.request(endpoint);
+    const url = queryString ? `${endpoint}?${queryString}` : endpoint;
+    return this.client.request(url);
   }
 
-  // Item creation
-  async createItem(itemData) {
-    if (!itemData || typeof itemData !== 'object') {
-      throw new Error('Valid item data object is required');
+  async createResource(resourceData, endpoint = '/resources') {
+    if (!resourceData || typeof resourceData !== 'object') {
+      throw new Error('Valid resource data object is required');
     }
-
-    if (!itemData.name || !itemData.description) {
-      throw new Error('Item must have name and description');
-    }
-
-    return this.client.request('/items', {
+    return this.client.request(endpoint, {
       method: 'POST',
-      body: itemData
+      body: resourceData
     });
   }
 
-  // Item update
-  async updateItem(id, updates) {
+  async updateResource(id, updates, endpoint = '/resources') {
     if (!id || typeof id !== 'string') {
       throw new Error('Valid ID is required');
     }
-
     if (!updates || typeof updates !== 'object') {
       throw new Error('Valid updates object is required');
     }
-
-    return this.client.request(`/items/${id}`, {
+    return this.client.request(`${endpoint}/${id}`, {
       method: 'PUT',
       body: updates
     });
   }
 
-  // Item deletion
-  async deleteItem(id) {
+  async deleteResource(id, endpoint = '/resources') {
     if (!id || typeof id !== 'string') {
       throw new Error('Valid ID is required');
     }
-
-    return this.client.request(`/items/${id}`, {
+    return this.client.request(`${endpoint}/${id}`, {
       method: 'DELETE'
     });
   }
 
-  // Search functionality
-  async searchItems(query, filters = {}) {
+  async searchResources(query, endpoint = '/search', filters = {}) {
     if (!query || typeof query !== 'string') {
       throw new Error('Valid search query is required');
     }
-
     const searchParams = new URLSearchParams({
       q: query,
       ...filters
     });
-
-    return this.client.request(`/search?${searchParams}`);
+    return this.client.request(`${endpoint}?${searchParams}`);
   }
 
-  // Utility methods
   clearCache() {
     this.client.clearCache();
   }
