@@ -1,57 +1,56 @@
 import APIWrapper from '../src/index.js';
 
-// Initialize the API wrapper
+// Initialize with your API details
 const api = new APIWrapper({
-  apiKey: 'your-api-key-here',
-  baseURL: 'https://api.example.com/v1',
-  cacheTTL: 300000 // 5 minutes
+  apiKey: 'your-actual-api-key',
+  baseURL: 'https://api.yourservice.com/v1',
+  cacheTTL: 300000
 });
 
-// Example usage
 async function demonstrateAPI() {
   try {
-    // Get data by ID
-    const data = await api.getData('123');
-    console.log('Retrieved data:', data);
+    // Get resource by ID
+    const resource = await api.getResource('123', '/users');
+    console.log('User:', resource);
 
-    // Get all data with filters
-    const allData = await api.getAllData({
+    // Get all resources with filters
+    const allUsers = await api.getAllResources('/users', {
       limit: 10,
       offset: 0,
-      sort: 'created_at'
+      status: 'active'
     });
-    console.log('All data:', allData);
+    console.log('All users:', allUsers);
 
-    // Create a new item
-    const newItem = await api.createItem({
-      name: 'Example Item',
-      description: 'This is an example item',
-      category: 'examples'
-    });
-    console.log('Created item:', newItem);
+    // Create new resource
+    const newUser = await api.createResource({
+      name: 'John Doe',
+      email: 'john@example.com',
+      role: 'user'
+    }, '/users');
+    console.log('Created user:', newUser);
 
-    // Update an item
-    const updatedItem = await api.updateItem('123', {
-      name: 'Updated Item Name',
-      description: 'Updated description'
-    });
-    console.log('Updated item:', updatedItem);
+    // Update resource
+    const updatedUser = await api.updateResource('123', {
+      name: 'John Smith',
+      status: 'verified'
+    }, '/users');
+    console.log('Updated user:', updatedUser);
 
-    // Search items
-    const searchResults = await api.searchItems('example', {
-      category: 'examples',
-      limit: 5
-    });
+    // Search resources
+    const searchResults = await api.searchResources(
+      'john',
+      '/users/search',
+      { role: 'user' }
+    );
     console.log('Search results:', searchResults);
 
-    // Delete an item
-    await api.deleteItem('123');
-    console.log('Item deleted successfully');
+    // Delete resource
+    await api.deleteResource('123', '/users');
+    console.log('User deleted successfully');
 
   } catch (error) {
     console.error('API Error:', error.message);
   }
 }
 
-// Run examples
 demonstrateAPI();
