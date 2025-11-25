@@ -1,212 +1,278 @@
-**File Structure:**
-```
-api-wrapper/
-├── src/
-│   ├── client.js
-│   └── index.js
-├── examples/
-│   └── usage.js
-├── README.md
-└── package.json
-```
-
-**README.md**
 ```markdown
-# API Wrapper that you can adapt for any REST API
+# Universal API Wrapper
 
-A robust, reusable JavaScript client that you can adapt for any REST API. This wrapper provides a clean, promise-based interface with built-in error handling, request caching, and input validation.
+A production-ready, dependency-free JavaScript API client for seamless REST API integration. Built with best practices for reliability, performance, and developer experience.
 
-## Features
+## 🚀 Features
 
-- **Promise-based API** using async/await syntax
-- **Automatic error handling** for HTTP errors and network issues
-- **Request caching** with configurable TTL
-- **Input validation** before sending requests
-- **TypeScript support** (if using TypeScript version)
-- **Modular design** for easy extensibility
-- **Comprehensive error messages** for easier debugging
+- **Universal Compatibility** - Works in Node.js 18+ and all modern browsers
+- **Zero Dependencies** - Uses native fetch API, no bloat
+- **Smart Caching** - Configurable request caching with TTL support
+- **Comprehensive Error Handling** - Meaningful error messages and recovery
+- **Input Validation** - Parameter validation before requests
+- **TypeScript Ready** - Full type support out of the box
+- **Production Ready** - Battle-tested patterns used in production apps
+- **Fully Configurable** - Customizable endpoints, headers, and timeouts
 
-## Installation
+## 📦 Installation
 
 ```bash
-npm install api-wrapper
+npm install universal-api-wrapper
 ```
 
-Or include directly in your project:
+## ⚡ Quick Start
 
 ```javascript
-import APIWrapper from './src/index.js';
-```
+import APIWrapper from 'universal-api-wrapper';
 
-## Quick Start
-
-```javascript
-import APIWrapper from 'api-wrapper';
-
-// Initialize with your API credentials
+// Initialize with your API configuration
 const api = new APIWrapper({
   apiKey: 'your-api-key-here',
-  baseURL: 'https://api.example.com/v1', // Optional
-  cacheTTL: 300000 // Optional: 5 minutes cache
+  baseURL: 'https://api.yourservice.com/v1',
+  cacheTTL: 300000 // 5 minutes cache
 });
 
-// Use the API
-async function example() {
+// Start making requests
+async function fetchUser() {
   try {
-    const data = await api.getData('item-123');
-    console.log(data);
+    const user = await api.getResource('user-123', '/users');
+    console.log('User data:', user);
   } catch (error) {
     console.error('API Error:', error.message);
   }
 }
 ```
 
-## Configuration
+## 🔧 Configuration
 
-### Constructor Options
+### Basic Setup
 
 ```javascript
 const api = new APIWrapper({
-  apiKey: 'your-api-key',      // Required
-  baseURL: 'https://api.example.com/v1', // Optional
-  cacheTTL: 300000             // Optional: cache time-to-live in milliseconds
+  apiKey: 'your-api-key',           // Required
+  baseURL: 'https://api.example.com/v1', // Required
+  cacheTTL: 300000,                 // Cache TTL in milliseconds
+  headers: {                         // Custom headers
+    'X-API-Version': '2023-10-01',
+    'User-Agent': 'MyApp/1.0.0'
+  }
 });
 ```
 
 ### Environment Variables
 
-Alternatively, set your API key via environment variable:
-
 ```bash
-export API_KEY="your-api-key-here"
+export API_KEY="your-actual-api-key"
+export BASE_URL="https://api.example.com/v1"
 ```
 
 ```javascript
-const api = new APIWrapper(); // Automatically uses process.env.API_KEY
+// Automatically uses environment variables
+const api = new APIWrapper();
 ```
 
-## API Methods
+## 📚 API Reference
 
-### getData(id, options)
-Retrieve a specific item by ID.
+### Core Methods
+
+#### `getResource(id, endpoint)`
+Retrieve a single resource by ID.
 
 ```javascript
-// Example
-const item = await api.getData('item-123');
+const user = await api.getResource('123', '/users');
+const product = await api.getResource('456', '/products');
 ```
 
-### getAllData(params)
-Retrieve all items with optional filtering and pagination.
+#### `getAllResources(endpoint, params)`
+List resources with pagination and filtering.
 
 ```javascript
-// Example with pagination
-const items = await api.getAllData({
+const users = await api.getAllResources('/users', {
   limit: 10,
   offset: 0,
+  status: 'active',
   sort: 'created_at'
 });
 ```
 
-### createItem(itemData)
-Create a new item.
+#### `createResource(data, endpoint)`
+Create a new resource.
 
 ```javascript
-// Example
-const newItem = await api.createItem({
-  name: 'Example Item',
-  description: 'This is an example item',
-  category: 'examples'
-});
+const newUser = await api.createResource({
+  name: 'Jane Smith',
+  email: 'jane@example.com',
+  role: 'admin'
+}, '/users');
 ```
 
-### updateItem(id, updates)
-Update an existing item.
+#### `updateResource(id, updates, endpoint)`
+Update an existing resource.
 
 ```javascript
-// Example
-const updatedItem = await api.updateItem('item-123', {
-  name: 'Updated Name',
-  description: 'New description'
-});
+const updatedUser = await api.updateResource('123', {
+  name: 'Jane Doe',
+  status: 'verified'
+}, '/users');
 ```
 
-### deleteItem(id)
-Delete an item by ID.
+#### `deleteResource(id, endpoint)`
+Delete a resource.
 
 ```javascript
-// Example
-await api.deleteItem('item-123');
+await api.deleteResource('123', '/users');
 ```
 
-### searchItems(query, filters)
-Search items with optional filters.
+#### `searchResources(query, endpoint, filters)`
+Search with query and filters.
 
 ```javascript
-// Example
-const results = await api.searchItems('example query', {
-  category: 'docs',
-  limit: 5
-});
+const results = await api.searchResources(
+  'laptop',
+  '/products/search',
+  { 
+    category: 'electronics',
+    price_max: 1000,
+    in_stock: true
+  }
+);
 ```
 
-## Error Handling
+### Utility Methods
 
-All methods throw descriptive errors:
-
-```javascript
-try {
-  const data = await api.getData('invalid-id');
-} catch (error) {
-  console.error(error.message);
-  // Examples:
-  // - "Valid ID is required"
-  // - "API Error: 404 Not Found"
-  // - "Request failed: Network error"
-}
-```
-
-## Caching
-
-GET requests are automatically cached for 5 minutes (configurable):
+#### `clearCache()`
+Clear all cached requests.
 
 ```javascript
-// Configure cache TTL (in milliseconds)
-const api = new APIWrapper({
-  apiKey: 'your-key',
-  cacheTTL: 600000 // 10 minutes
-});
-
-// Clear cache manually
 api.clearCache();
 ```
 
-## Input Validation
+#### `setApiKey(apiKey)`
+Update API key at runtime.
 
-The wrapper validates inputs before making requests:
+```javascript
+api.setApiKey('new-api-key-here');
+```
 
-- **IDs** must be non-empty strings
-- **Item data** must be valid objects with required fields
-- **Search queries** must be non-empty strings
+#### `setBaseURL(baseURL)`
+Update base URL.
 
-## Examples
+```javascript
+api.setBaseURL('https://api.newexample.com/v2');
+```
 
-See the `examples/` directory for complete usage examples:
+## 🛡️ Error Handling
+
+```javascript
+try {
+  const data = await api.getResource('invalid-id', '/users');
+} catch (error) {
+  console.error('Error details:', {
+    message: error.message,
+    timestamp: new Date().toISOString()
+  });
+  
+  // Handle specific error types
+  if (error.message.includes('404')) {
+    // Resource not found
+    showNotFoundError();
+  } else if (error.message.includes('Network error')) {
+    // Network connectivity issue
+    showOfflineMessage();
+  } else {
+    // Generic error handling
+    showErrorMessage(error.message);
+  }
+}
+```
+
+## 💾 Caching
+
+### Automatic Caching
+GET requests are automatically cached with configurable TTL:
+
+```javascript
+const api = new APIWrapper({
+  apiKey: 'your-key',
+  baseURL: 'https://api.example.com/v1',
+  cacheTTL: 600000 // 10 minutes cache
+});
+```
+
+### Manual Cache Control
+```javascript
+// Clear specific cache or all cache
+api.clearCache();
+
+// Cache is automatically invalidated on POST/PUT/DELETE requests
+```
+
+## 🔄 Advanced Usage
+
+### Custom Request Headers
+```javascript
+const api = new APIWrapper({
+  apiKey: 'your-key',
+  baseURL: 'https://api.example.com/v1',
+  headers: {
+    'X-API-Version': '2023-10-01',
+    'Accept-Language': 'en-US',
+    'User-Agent': 'MyApp/1.0.0'
+  }
+});
+```
+
+### Dynamic Endpoint Management
+```javascript
+// Reuse wrapper across different API sections
+class UserAPI {
+  constructor(apiClient) {
+    this.api = apiClient;
+  }
+  
+  async getUser(id) {
+    return this.api.getResource(id, '/users');
+  }
+  
+  async createUser(userData) {
+    return this.api.createResource(userData, '/users');
+  }
+}
+
+const userAPI = new UserAPI(api);
+const user = await userAPI.getUser('123');
+```
+
+## 🧪 Testing
+
+Run the included examples:
 
 ```bash
 npm run test
 ```
 
-## Contributing
+Check the `examples/` directory for comprehensive usage patterns.
+
+## 🤝 Contributing
+
+We welcome contributions!
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Submit a pull request
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'Add amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
 
-## License
+## 📄 License
 
-MIT License - see LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+
+## 🏆 Credits
+
+Built with ❤️ by [Tam](https://github.com/amvitor-cm)
+
+---
+
+**Ready to power your next project?** Star ⭐ the repo if you find this useful!
 ```
-
-**Note:** Replace `[INSERT API NAME]` with the actual API name.
