@@ -2,7 +2,7 @@
 
 A production-ready, dependency-free JavaScript API client for seamless REST API integration. Built with best practices for reliability, performance, and developer experience.
 
-## 🚀 Features
+## Features
 
 - **Universal Compatibility** - Works in Node.js 18+ and all modern browsers
 - **Zero Dependencies** - Uses native fetch API, no bloat
@@ -13,13 +13,13 @@ A production-ready, dependency-free JavaScript API client for seamless REST API 
 - **Production Ready** - Battle-tested patterns used in production apps
 - **Fully Configurable** - Customizable endpoints, headers, and timeouts
 
-## 📦 Installation
+## Installation
 
 ```bash
 npm install universal-api-wrapper
 ```
 
-## ⚡ Quick Start
+## Quick Start
 
 ```javascript
 import APIWrapper from 'universal-api-wrapper';
@@ -42,7 +42,7 @@ async function fetchUser() {
 }
 ```
 
-## 🔧 Configuration
+## Configuration
 
 ### Basic Setup
 
@@ -70,7 +70,7 @@ export BASE_URL="https://api.example.com/v1"
 const api = new APIWrapper();
 ```
 
-## 📚 API Reference
+## API Reference
 
 ### Core Methods
 
@@ -160,7 +160,7 @@ Update base URL.
 api.setBaseURL('https://api.newexample.com/v2');
 ```
 
-## 🛡️ Error Handling
+##  Error Handling
 
 ```javascript
 try {
@@ -185,7 +185,7 @@ try {
 }
 ```
 
-## 💾 Caching
+##  Caching
 
 ### Automatic Caching
 GET requests are automatically cached with configurable TTL:
@@ -206,7 +206,7 @@ api.clearCache();
 // Cache is automatically invalidated on POST/PUT/DELETE requests
 ```
 
-## 🔄 Advanced Usage
+## Advanced Usage
 
 ### Custom Request Headers
 ```javascript
@@ -242,7 +242,7 @@ const userAPI = new UserAPI(api);
 const user = await userAPI.getUser('123');
 ```
 
-## 🧪 Testing
+##  Testing
 
 Run the included examples:
 
@@ -252,7 +252,7 @@ npm run test
 
 Check the `examples/` directory for comprehensive usage patterns.
 
-## 🤝 Contributing
+##  Contributing
 
 We welcome contributions!
 
@@ -262,7 +262,7 @@ We welcome contributions!
 4. Push to the branch: `git push origin feature/amazing-feature`
 5. Open a Pull Request
 
-## 📄 License
+##  License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
